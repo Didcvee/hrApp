@@ -1,0 +1,98 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:HrApp.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HrApp.Models"
+        xmlns:material="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
+        x:Class="HrApp.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="HR Management"
+        Background="{DynamicResource MaterialBackgroundPaperBrush}">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Grid ColumnDefinitions="1.2*,2.8*"
+          RowDefinitions="Auto,*"
+          Margin="16"
+          Background="{DynamicResource MaterialBackgroundPaperBrush}">
+
+        <!-- Header -->
+        <TextBlock Grid.ColumnSpan="2"
+                   Text="Сотрудники"
+                   FontSize="26"
+                   FontWeight="Bold"
+                   Foreground="{DynamicResource MaterialPrimaryTextBrush}"
+                   Margin="0 0 0 16"/>
+
+        <!-- Дерево департаментов -->
+        <Border Grid.Row="1" Grid.Column="0"
+                Background="{DynamicResource MaterialBackgroundCardBrush}"
+                CornerRadius="12"
+                Padding="12"
+                Margin="0 0 16 0">
+            <DockPanel>
+                <TextBlock Text="Департаменты"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Margin="0 0 0 12"
+                           Foreground="{DynamicResource MaterialPrimaryTextBrush}"
+                           DockPanel.Dock="Top"/>
+
+                <ScrollViewer MaxHeight="500" VerticalScrollBarVisibility="Auto">
+                    <TreeView ItemsSource="{Binding Departments}"
+                              SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}"
+                              BorderThickness="0">
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate DataType="{x:Type local:Department}" ItemsSource="{Binding Children}">
+                                <StackPanel Orientation="Horizontal" Margin="4">
+                                    <TextBlock Text="{Binding Name}" FontSize="14"/>
+                                </StackPanel>
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!-- Список сотрудников -->
+        <Border Grid.Row="1" Grid.Column="1"
+                Background="{DynamicResource MaterialBackgroundCardBrush}"
+                CornerRadius="12"
+                Padding="12">
+            <DockPanel>
+                <TextBlock Text="Сотрудники департамента"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Margin="0 0 0 12"
+                           Foreground="{DynamicResource MaterialPrimaryTextBrush}"
+                           DockPanel.Dock="Top"/>
+
+                <ScrollViewer MaxHeight="500" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding DepartmentEmployees}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0 0 0 8"
+                                        Padding="8"
+                                        Background="{DynamicResource MaterialBackgroundPaperBrush}"
+                                        CornerRadius="8"
+                                        BorderBrush="{DynamicResource MaterialDividerBrush}"
+                                        BorderThickness="1">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="{Binding FullName}"
+                                                   FontSize="14"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource MaterialPrimaryTextBrush}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>
